@@ -34,6 +34,13 @@ public class CVDisplay extends JFrame {
         try {
 
             Connection conn = DBConnection.getConnection();
+            
+            if (conn == null) {
+                JOptionPane.showMessageDialog(this, "Could not connect to database. Check if MySQL is running and credentials are correct.", "Connection Error", JOptionPane.ERROR_MESSAGE);
+                area.setText("Failed to load CV: Connection Error.");
+                return;
+            }
+
             Statement stmt = conn.createStatement();
 
             StringBuilder cv = new StringBuilder();
@@ -41,8 +48,9 @@ public class CVDisplay extends JFrame {
             ResultSet rs = stmt.executeQuery(
                     "SELECT * FROM user WHERE userid="+userid);
 
+            boolean found = false;
             while(rs.next()) {
-
+                found = true;
                 cv.append("===== PERSONAL DETAILS =====\n\n");
 
                 cv.append("Name: ")
@@ -62,6 +70,11 @@ public class CVDisplay extends JFrame {
                 cv.append("Address: ")
                   .append(rs.getString("address"))
                   .append("\n\n");
+            }
+
+            if (!found) {
+                area.setText("No CV records found for User ID: " + userid);
+                return;
             }
 
             rs = stmt.executeQuery(
@@ -134,6 +147,8 @@ public class CVDisplay extends JFrame {
 
         } catch(Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading CV: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            area.setText("Error: " + e.getMessage());
         }
     }
 

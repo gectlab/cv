@@ -1,25 +1,16 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnection {
 
-    public static Connection getConnection() {
+    public static Connection getConnection() throws SQLException, ClassNotFoundException {
 
-        Connection conn = null;
+        Class.forName("com.mysql.cj.jdbc.Driver");
 
-        try {
-
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/cvdb",
-                    "root",
-                    "Root@1234");
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        return conn;
+        return DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/cvdb",
+                "root",
+                "Root@1234");
     }
 }
