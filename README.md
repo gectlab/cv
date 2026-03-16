@@ -497,8 +497,7 @@ Swing GUI
 # 17. Quick Lab Workflow
 
 ```bash
-sudo systemctl start mysql
-sudo mysql < database.sql
+mysql -u root -p < database.sql
 
 javac -cp ".:lib/mysql.jar" *.java
 java -cp ".:lib/mysql.jar" CVDisplay
